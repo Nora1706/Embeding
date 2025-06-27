@@ -1,0 +1,12 @@
+# Ignore Python virtual environments and build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+ENV/
+bin/
+lib/
+lib64/
+*.egg-info/

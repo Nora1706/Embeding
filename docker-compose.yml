@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  weaviate:
+    image: cr.weaviate.io/semitechnologies/weaviate:1.30.6
+    ports:
+      - "8081:8080"      # REST API
+      - "50051:50051"    # gRPC API
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      ENABLE_API_BASED_MODULES: 'true'
+      ENABLE_MODULES: multi2vec-nvidia
+      DEFAULT_VECTORIZER_MODULE: multi2vec-nvidia
+      NVIDIA_APIKEY: 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
+      CLUSTER_HOSTNAME: 'node1'
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+      - ./flickr-images:/data
+    restart: on-failure
+    depends_on:
+      - multi2vec-nvidia
+
+  multi2vec-nvidia:
+    image: cr.weaviate.io/semitechnologies/multi2vec-nvidia:latest  # ✅ FIXED
+    environment:
+      ENABLE_CUDA: '0'
+      NVIDIA_APIKEY: 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
+    ports:
+      - "8080:8080"
+
+volumes:
+  weaviate_data:
+
